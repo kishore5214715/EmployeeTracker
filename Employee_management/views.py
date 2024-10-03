@@ -64,9 +64,20 @@ def get_attendance(request):
 
 
 # get the specific dep attendance
+# def get_specificdep_attendance(request, dep_name):
+#     if request.method == 'GET':
+#         attendance_records = Attendance.objects.filter(employee_id__destination=dep_name).values(
+#             'employee_id__id', 'employee_id__name', 'date', 'status'
+#         )
+#         return JsonResponse(list(attendance_records), safe=False)
+
 def get_specificdep_attendance(request, dep_name):
     if request.method == 'GET':
         attendance_records = Attendance.objects.filter(employee_id__destination=dep_name).values(
-            'employee_id__id', 'employee_id__name', 'date', 'status'
+            employee_id='employee_id_id',
+            employee_name='employee_id__name',
+            date='date',
+            status='status'
         )
+
         return JsonResponse(list(attendance_records), safe=False)

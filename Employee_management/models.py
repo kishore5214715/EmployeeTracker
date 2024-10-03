@@ -23,4 +23,4 @@ class Attendance(models.Model):
 
     #  check if the 
     class Meta:
-        unique_together = ('employee_id', 'status')
+        unique_together = ('employee_id', 'date')
