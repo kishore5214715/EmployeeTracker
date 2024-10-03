@@ -35,15 +35,17 @@ def get_data(request):
 
 # receive the data in the specific user
 def get_specific_employee(request, id):
-    employee_data = Adding.objects.get(id=id)
-    json_data = {
-        'id': employee_data.id,
-        'name': employee_data.name,
-        'destination': employee_data.destination,
-        'date': employee_data.date,
-    }
-    return JsonResponse(json_data, safe=False)
-
+    if request.method == 'GET':
+        employee_data = Adding.objects.get(id=id)
+        json_data = {
+            'id': employee_data.id,
+            'name': employee_data.name,
+            'destination': employee_data.destination,
+            'date': employee_data.date,
+        }
+        return JsonResponse(json_data, safe=False)
+    else:
+        return render(request,'Employee_management/sucess.html')
 
 # mark the attendance for the specific user
 def mark_attendance(request, id, status):
@@ -54,6 +56,8 @@ def mark_attendance(request, id, status):
             Attendance.objects.create(employee_id=add_db, status=status)
             return render(request, 'Employee_management/sucess.html')
 
+    else:
+        return render(request,'Employee_management/sucess.html')
 
 # get the attendance of all the user
 def get_attendance(request):
@@ -62,22 +66,17 @@ def get_attendance(request):
         result = list(attendance.values('employee_id', 'date', 'status'))
         return JsonResponse(result, safe=False)
 
+    else:
+        return render(request,'Employee_management/sucess.html')
 
 # get the specific dep attendance
-# def get_specificdep_attendance(request, dep_name):
-#     if request.method == 'GET':
-#         attendance_records = Attendance.objects.filter(employee_id__destination=dep_name).values(
-#             'employee_id__id', 'employee_id__name', 'date', 'status'
-#         )
-#         return JsonResponse(list(attendance_records), safe=False)
-
 def get_specificdep_attendance(request, dep_name):
     if request.method == 'GET':
         attendance_records = Attendance.objects.filter(employee_id__destination=dep_name).values(
-            employee_id='employee_id_id',
-            employee_name='employee_id__name',
-            date='date',
-            status='status'
+            'employee_id__id', 'employee_id__name', 'date', 'status'
         )
-
         return JsonResponse(list(attendance_records), safe=False)
+
+    else:
+        return render(request,'Employee_management/sucess.html')
+
